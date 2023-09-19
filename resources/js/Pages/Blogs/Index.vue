@@ -2,6 +2,8 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
+import { ref, watch } from "vue";
+import { router } from '@inertiajs/vue3'
 
 const props = defineProps({
     blogs: {
@@ -9,6 +11,20 @@ const props = defineProps({
         default: () => ({}),
     },
 });
+
+let search = ref('');
+
+watch(search, (value) => {
+  router.get(
+    "/blogs",
+    { search: value },
+    {
+      preserveState: true,
+    }
+  );
+}); 
+
+
 const form = useForm({});
 
 function destroy(id) {
@@ -28,12 +44,10 @@ function destroy(id) {
             </h2>
         </template>
 
-        <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
-
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div class="relative mb-4">
-                    <input type="search" id="default-search" class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search Blogs...">
+                    <input type="search" v-model="search" id="default-search" class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search Blogs...">
                 </div>
 
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">

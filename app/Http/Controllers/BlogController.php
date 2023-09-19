@@ -8,12 +8,24 @@ use Inertia\Inertia;
 
 class BlogController extends Controller
 {
+    public $search = '';
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $blogs = Blog::all();
+        //$blogs = Blog::where('title', 'like', '%' . $this->search .'%')->latest()->get();
+
+        $input = $request->all();
+        $this->search = $input['search'] ?? '';
+
+        $blogs = Blog::query()
+            ->when($this->search, function ($query, $search) {
+                $query->where('title', 'like', '%' . $search . '%');
+            })
+            ->latest()
+            ->get();
 
         return Inertia::render(
             'Blogs/Index',
