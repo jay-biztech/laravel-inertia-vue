@@ -19,14 +19,10 @@ const props = defineProps({
 
 let search = ref('');
 
-router.reload({ only: ['totalCount'] })
+router.reload({ only: ['totalCount'] });
 
 watch(search, debounce((value) => {
-    router.get(
-        "/blogs",
-        { search: value },
-        {preserveState: true}
-    );
+    router.reload({ data: { search: value }, only: ['blogs'] });
 }, 500))
 
 const form = useForm({});

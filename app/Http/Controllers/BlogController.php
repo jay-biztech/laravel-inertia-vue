@@ -30,14 +30,14 @@ class BlogController extends Controller
             'Blogs/Index',
             [
                 'totalCount' => Inertia::lazy(fn () => $this->totalCount()),
-                'blogs' => $blogs
+                'blogs' => fn() => $blogs
             ]
         );
     }
 
     public function totalCount() 
     {
-        sleep(5);
+        sleep(2);
 
         return Blog::all()->count();
     }
