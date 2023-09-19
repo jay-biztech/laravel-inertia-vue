@@ -4,6 +4,7 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
 import { ref, watch } from "vue";
 import { router } from '@inertiajs/vue3'
+import debounce from 'lodash.debounce'
 
 const props = defineProps({
     blogs: {
@@ -14,16 +15,13 @@ const props = defineProps({
 
 let search = ref('');
 
-watch(search, (value) => {
-  router.get(
-    "/blogs",
-    { search: value },
-    {
-      preserveState: true,
-    }
-  );
-}); 
-
+watch(search, debounce((value) => {
+    router.get(
+        "/blogs",
+        { search: value },
+        {preserveState: true}
+    );
+}, 500))
 
 const form = useForm({});
 
