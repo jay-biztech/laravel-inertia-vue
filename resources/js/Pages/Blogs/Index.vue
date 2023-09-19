@@ -12,7 +12,8 @@ const props = defineProps({
         default: () => ({}),
     },
     totalCount: {
-        type: String
+        type: Number,
+        default: 0
     }
 });
 
@@ -43,8 +44,11 @@ function destroy(id) {
     <AuthenticatedLayout>
         <template #header>
             <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                Blogs Listing <span v-show="totalCount">({{ totalCount }})</span>
+                Blogs Listing 
             </h2>
+            <div :class="{ 'loader' : totalCount == 0}">
+                <span v-show="totalCount">Total blogs: {{ totalCount }}</span>
+            </div>
         </template>
 
         <div class="py-12">
