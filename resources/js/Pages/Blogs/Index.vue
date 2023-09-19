@@ -11,9 +11,14 @@ const props = defineProps({
         type: Object,
         default: () => ({}),
     },
+    totalCount: {
+        type: String
+    }
 });
 
 let search = ref('');
+
+router.reload({ only: ['totalCount'] })
 
 watch(search, debounce((value) => {
     router.get(
@@ -38,7 +43,7 @@ function destroy(id) {
     <AuthenticatedLayout>
         <template #header>
             <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                Blogs Listing
+                Blogs Listing <span v-show="totalCount">({{ totalCount }})</span>
             </h2>
         </template>
 

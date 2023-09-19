@@ -15,8 +15,6 @@ class BlogController extends Controller
      */
     public function index(Request $request)
     {
-        //$blogs = Blog::where('title', 'like', '%' . $this->search .'%')->latest()->get();
-
         $input = $request->all();
         $this->search = $input['search'] ?? '';
 
@@ -27,12 +25,21 @@ class BlogController extends Controller
             ->latest()
             ->get();
 
+
         return Inertia::render(
             'Blogs/Index',
             [
+                'totalCount' => Inertia::lazy(fn () => $this->totalCount()),
                 'blogs' => $blogs
             ]
         );
+    }
+
+    public function totalCount() 
+    {
+        sleep(5);
+
+        return Blog::all()->count();
     }
 
     /**
