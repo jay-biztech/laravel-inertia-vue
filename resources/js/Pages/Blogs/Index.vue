@@ -1,6 +1,8 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+import Modal from '@/Components/Modal.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { Head, Link, useForm } from "@inertiajs/vue3";
 import { ref, watch } from "vue";
 import { router } from '@inertiajs/vue3'
@@ -14,10 +16,17 @@ const props = defineProps({
     totalCount: {
         type: Number,
         default: 0
+    },
+    blog: {
+        type: Object,
+        default: () => ({}),
     }
 });
 
 let search = ref('');
+let id = ref('');
+
+const showBlogDetail = ref(false);
 
 router.reload({ only: ['totalCount'] });
 
@@ -32,10 +41,33 @@ function destroy(id) {
         form.delete(route("blogs.destroy", id));
     }
 }
+
+function view(id) {
+    showBlogDetail.value = true;
+
+    router.reload({ data: { id }, only: ['blog'] });
+}
+
+const closeModal = () => {
+    showBlogDetail.value = false;
+}
 </script>
 
 <template>
     <Head title="Blogs" />
+
+    <Modal :show="showBlogDetail" @close="closeModal">
+        <div class="p-6">
+            <h2 class="text-xl font-semibold leading-tight text-gray-800">
+                {{ blog.title }}
+            </h2>
+            <p> {{ blog.content }} </p>
+        </div>
+
+        <div class="mt-6 flex justify-end">
+            <SecondaryButton @click="closeModal"> Cancel </SecondaryButton>
+        </div>
+    </Modal>
 
     <AuthenticatedLayout>
         <template #header>
@@ -75,6 +107,9 @@ function destroy(id) {
                                         <th scope="col" class="px-6 py-3">
                                             Delete
                                         </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            View
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -96,6 +131,11 @@ function destroy(id) {
                                         <td class="px-6 py-4">
                                             <PrimaryButton class="bg-red-700" @click="destroy(blog.id)">
                                                 Delete
+                                            </PrimaryButton>
+                                        </td>
+                                        <td>
+                                            <PrimaryButton class="bg-green-700" @click="view(blog.id)">
+                                                View
                                             </PrimaryButton>
                                         </td>
                                     </tr>

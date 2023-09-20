@@ -9,6 +9,7 @@ use Inertia\Inertia;
 class BlogController extends Controller
 {
     public $search = '';
+    public $id = '';
 
     /**
      * Display a listing of the resource.
@@ -17,6 +18,11 @@ class BlogController extends Controller
     {
         $input = $request->all();
         $this->search = $input['search'] ?? '';
+        $this->id = $input['id'] ?? '';
+
+        if ($this->id) {
+            $blog = Blog::find($this->id);
+        }
 
         $blogs = Blog::query()
             ->when($this->search, function ($query, $search) {
@@ -30,7 +36,8 @@ class BlogController extends Controller
             'Blogs/Index',
             [
                 'totalCount' => Inertia::lazy(fn () => $this->totalCount()),
-                'blogs' => fn() => $blogs
+                'blogs' => fn() => $blogs,
+                'blog' => Inertia::lazy(fn () => $blog)
             ]
         );
     }
@@ -75,7 +82,7 @@ class BlogController extends Controller
      */
     public function show(Blog $blog)
     {
-        //
+        
     }
 
     /**
