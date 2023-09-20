@@ -50,6 +50,8 @@ function view(id) {
 
 const closeModal = () => {
     showBlogDetail.value = false;
+
+    router.reload({only: ['blogs'] });
 }
 </script>
 
@@ -65,7 +67,7 @@ const closeModal = () => {
         </div>
 
         <div class="mt-6 flex justify-end">
-            <SecondaryButton @click="closeModal"> Cancel </SecondaryButton>
+            <SecondaryButton @click="closeModal"> Close </SecondaryButton>
         </div>
     </Modal>
 
