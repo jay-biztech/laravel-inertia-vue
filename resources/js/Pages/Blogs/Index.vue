@@ -51,7 +51,7 @@ function view(id) {
 const closeModal = () => {
     showBlogDetail.value = false;
 
-    router.reload({only: ['blogs'] });
+    router.get('/blogs');
 }
 </script>
 
